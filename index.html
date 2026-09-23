@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>แบบประเมินการบริการห้องน้ำ</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { kanit: ['Kanit', 'sans-serif'] },
+      }
+    }
+  }
+</script>
+
+<style>
+  body { font-family: 'Kanit', sans-serif; }
+  .modal-hidden { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+
+<body class="bg-gray-100 min-h-screen font-kanit text-gray-800">
+
+  <!-- แถบหัวเรื่อง (โลโก้ + ชื่อแบบฟอร์ม) -->
+  <header class="bg-white border-b-4 border-blue-500">
+    <div class="max-w-3xl mx-auto flex items-center gap-4 px-4 sm:px-6 py-4">
+      <div class="flex flex-col leading-none shrink-0">
+        <span class="text-lg sm:text-xl font-extrabold tracking-tight text-gray-900">CENTRAL</span>
+        <span class="text-[10px] sm:text-xs font-semibold tracking-widest text-amber-700 -mt-0.5">PATTANA</span>
+      </div>
+      <div class="w-px h-10 bg-gray-200 hidden sm:block"></div>
+      <div class="min-w-0">
+        <h1 class="text-blue-600 font-semibold text-base sm:text-lg leading-tight truncate">แบบประเมินความพึงพอใจในการใช้บริการห้องน้ำ</h1>
+        <p class="text-gray-400 text-xs">Customer satisfaction survey</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-4">
+
+    <div class="bg-white rounded-lg shadow-sm p-5">
+      <h2 class="text-gray-900 font-medium text-lg">แบบประเมินความพึงพอใจในการใช้บริการห้องน้ำ</h2>
+    </div>
+
+    <form id="toiletForm" class="space-y-4" novalidate>
+
+      <!-- 1. ความพึงพอใจโดยรวม -->
+      <fieldset class="bg-white rounded-lg shadow-sm p-5">
+        <legend class="text-gray-900 font-medium">คุณพึงพอใจในการใช้บริการห้องน้ำในครั้งนี้มากแค่ไหน? <span class="text-rose-500">*</span></legend>
+        <p class="text-gray-400 text-sm mb-4">How satisfied are you with our toilet?</p>
+
+        <div class="flex gap-3 sm:gap-4">
+          <label class="cursor-pointer">
+            <input type="radio" name="satisfaction" value="1" required class="peer sr-only">
+            <span class="text-4xl sm:text-5xl inline-flex items-center justify-center rounded-full p-1.5 transition-transform hover:scale-105 peer-checked:scale-110 peer-checked:bg-blue-50 peer-checked:ring-2 peer-checked:ring-blue-400">😣</span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="satisfaction" value="2" class="peer sr-only">
+            <span class="text-4xl sm:text-5xl inline-flex items-center justify-center rounded-full p-1.5 transition-transform hover:scale-105 peer-checked:scale-110 peer-checked:bg-blue-50 peer-checked:ring-2 peer-checked:ring-blue-400">🙁</span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="satisfaction" value="3" class="peer sr-only">
+            <span class="text-4xl sm:text-5xl inline-flex items-center justify-center rounded-full p-1.5 transition-transform hover:scale-105 peer-checked:scale-110 peer-checked:bg-blue-50 peer-checked:ring-2 peer-checked:ring-blue-400">😐</span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="satisfaction" value="4" class="peer sr-only">
+            <span class="text-4xl sm:text-5xl inline-flex items-center justify-center rounded-full p-1.5 transition-transform hover:scale-105 peer-checked:scale-110 peer-checked:bg-blue-50 peer-checked:ring-2 peer-checked:ring-blue-400">🙂</span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="satisfaction" value="5" class="peer sr-only">
+            <span class="text-4xl sm:text-5xl inline-flex items-center justify-center rounded-full p-1.5 transition-transform hover:scale-105 peer-checked:scale-110 peer-checked:bg-blue-50 peer-checked:ring-2 peer-checked:ring-blue-400">😄</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- 2. ช่วงอายุ -->
+      <div class="bg-white rounded-lg shadow-sm p-5">
+        <label for="age" class="block text-gray-900 font-medium">ช่วงอายุของคุณ <span class="text-rose-500">*</span></label>
+        <p class="text-gray-400 text-sm mb-3">Your age range</p>
+        <select id="age" name="age" required
+          class="w-full border border-gray-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-blue-200 focus:border-blue-500 outline-none transition-all">
+          <option value="" disabled selected>กรุณาเลือกช่วงอายุ</option>
+          <option value="ต่ำกว่า 20 ปี">ต่ำกว่า 20 ปี</option>
+          <option value="20-39 ปี">20-39 ปี</option>
+          <option value="40-59 ปี">40-59 ปี</option>
+          <option value="60 ปีขึ้นไป">60 ปีขึ้นไป</option>
+        </select>
+      </div>
+
+      <!-- 3. คะแนนรายด้าน -->
+      <div id="criteriaContainer" class="space-y-4"></div>
+
+      <!-- ข้อเสนอแนะเพิ่มเติม -->
+      <div class="bg-white rounded-lg shadow-sm p-5">
+        <label for="comments" class="block text-gray-900 font-medium">สามารถร่วมแสดงความคิดเห็นเพื่อพัฒนาการให้บริการต่อไป</label>
+        <p class="text-gray-400 text-sm mb-3">Please share your suggestion with us, your feedback is highly appreciated.</p>
+        <textarea id="comments" name="comments" rows="3" placeholder="พิมพ์ข้อเสนอแนะของคุณที่นี่..."
+          class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 outline-none resize-none transition-all"></textarea>
+      </div>
+
+      <button type="submit" id="submitBtn"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium p-3.5 rounded-lg transition-all shadow-sm hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 flex justify-center items-center gap-2 text-base">
+        <span>ส่งผลประเมิน</span>
+      </button>
+    </form>
+  </main>
+
+  <!-- ป๊อปอัปแจ้งเตือนความสำเร็จ -->
+  <div id="successModal" class="modal-hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50" style="display:none" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center border border-gray-100">
+      <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-100 text-emerald-600 mb-4">
+        <svg class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h2 id="successTitle" class="text-2xl font-semibold text-gray-900 mb-2">บันทึกสำเร็จ!</h2>
+      <p class="text-gray-500 text-sm mb-6">ระบบได้รับผลประเมินของคุณเรียบร้อยแล้ว ขอบคุณสำหรับความคิดเห็น</p>
+      <button id="modalCloseBtn"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700">
+        ตกลง
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // ★★★ แก้ตรงนี้ ★★★
+    // วางลิงก์ Web App (URL ที่ลงท้ายด้วย /exec) ที่ได้จากการ Deploy ใน Apps Script
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvGGuNjm8SqPM8vAaO85BGcp4zU8WrS9BgdizIsDxJlw2XLJ30_mPjhc184l-tGMKR/exec';
+
+    // รายการหัวข้อประเมินย่อย พร้อมคำแปลอังกฤษ
+    const CRITERIA = [
+      { name: 'cleanliness', label: 'ความสะอาดพื้นและผนัง', sub: 'Cleanliness of floor and walls' },
+      { name: 'ventilation', label: 'ระบบระบายอากาศ/กลิ่น', sub: 'Ventilation and odor control' },
+      { name: 'equipment',   label: 'ความพร้อมของอุปกรณ์/ทิชชู่', sub: 'Availability of supplies / tissue' },
+      { name: 'lighting',    label: 'แสงสว่างและความปลอดภัย', sub: 'Lighting and safety' },
+    ];
+
+    const criteriaContainer = document.getElementById('criteriaContainer');
+    CRITERIA.forEach(({ name, label, sub }) => {
+      const card = document.createElement('div');
+      card.className = 'bg-white rounded-lg shadow-sm p-5';
+
+      const pills = [1, 2, 3, 4, 5].map((n, i) => `
+        <label class="cursor-pointer">
+          <input type="radio" name="${name}" value="${n}" ${i === 0 ? 'required' : ''} class="peer sr-only">
+          <span class="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 text-sm font-medium text-gray-600 transition-colors peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600">${n}</span>
+        </label>
+      `).join('');
+
+      card.innerHTML = `
+        <p class="text-gray-900 font-medium">${label} <span class="text-rose-500">*</span></p>
+        <p class="text-gray-400 text-sm mb-3">${sub}</p>
+        <div class="flex gap-3">${pills}</div>
+      `;
+      criteriaContainer.appendChild(card);
+    });
+
+    const form = document.getElementById('toiletForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const modal = document.getElementById('successModal');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      if (SCRIPT_URL.indexOf('script.google.com') === -1) {
+        alert('ยังไม่ได้ตั้งค่า SCRIPT_URL ในไฟล์นี้ กรุณาแก้ตัวแปร SCRIPT_URL ด้านบนของสคริปต์ก่อน');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+      submitBtn.classList.add('bg-blue-400', 'cursor-not-allowed');
+      submitBtn.innerHTML = `
+        <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>กำลังบันทึกข้อมูล...</span>
+      `;
+
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+
+      try {
+        // ใช้ Content-Type: text/plain เพื่อให้เบราว์เซอร์ไม่ส่ง preflight (OPTIONS)
+        // ซึ่ง Apps Script Web App ไม่รองรับ preflight โดยตรง
+        const res = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+        });
+        const result = await res.json();
+
+        if (result.status !== 'success') {
+          throw new Error(result.message || 'ไม่ทราบสาเหตุ');
+        }
+
+        modal.classList.remove('modal-hidden');
+        modal.style.display = 'flex';
+        form.reset();
+      } catch (err) {
+        alert('เกิดข้อผิดพลาด: ' + err.message);
+      } finally {
+        resetButton();
+      }
+    });
+
+    function resetButton() {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('bg-blue-400', 'cursor-not-allowed');
+      submitBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+      submitBtn.innerHTML = '<span>ส่งผลประเมิน</span>';
+    }
+
+    document.getElementById('modalCloseBtn').addEventListener('click', function () {
+      modal.classList.add('modal-hidden');
+      modal.style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>
