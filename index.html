@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>แบบประเมินการบริการห้องน้ำ</title>
+<title>แบบประเมินการบริการศูนย์การค้าอุบลสแควร์</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -51,7 +51,7 @@
       </div>
       <div class="w-px h-14 sm:h-16 bg-gray-200"></div>
       <div class="min-w-0">
-        <h1 class="text-blue-600 font-semibold text-sm sm:text-lg leading-tight">แบบประเมินความพึงพอใจในการใช้บริการห้องน้ำ</h1>
+        <h1 class="text-blue-600 font-semibold text-sm sm:text-lg leading-tight">แบบประเมินความพึงพอใจในการใช้บริการศูนย์การค้าอุบลสแควร์</h1>
         <p class="text-gray-500 text-xs">Customer satisfaction survey</p>
       </div>
     </div>
@@ -62,16 +62,7 @@
 
     <form id="toiletForm" class="space-y-4" novalidate>
 
-      <!-- 1. ความพึงพอใจโดยรวม (สร้างด้วย JavaScript) -->
-      <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-md p-6 sm:p-8 border border-white/60">
-        <p class="text-gray-900 font-medium text-base sm:text-lg leading-snug">
-          คุณพึงพอใจในการใช้บริการห้องน้ำในครั้งนี้มากแค่ไหน? <span class="text-rose-500">*</span>
-        </p>
-        <p class="text-gray-500 text-xs sm:text-sm mt-1 mb-5">How satisfied are you with our toilet?</p>
-        <div id="overallContainer" class="flex items-start justify-between sm:justify-start gap-1 sm:gap-6"></div>
-      </div>
-
-      <!-- 2. ช่วงอายุ -->
+      <!-- 1. ช่วงอายุ (อยู่บนสุด) -->
       <div class="bg-white/90 backdrop-blur-md rounded-xl shadow-md p-5 border border-white/50">
         <label for="age" class="block text-gray-900 font-medium">ช่วงอายุของคุณ <span class="text-rose-500">*</span></label>
         <p class="text-gray-500 text-sm mb-3">Your age range</p>
@@ -83,6 +74,15 @@
           <option value="40-59 ปี">40-59 ปี</option>
           <option value="60 ปีขึ้นไป">60 ปีขึ้นไป</option>
         </select>
+      </div>
+
+      <!-- 2. ความพึงพอใจโดยรวม (สร้างด้วย JavaScript) -->
+      <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-md p-6 sm:p-8 border border-white/60">
+        <p class="text-gray-900 font-medium text-base sm:text-lg leading-snug">
+          คุณพึงพอใจในการใช้บริการห้องน้ำในครั้งนี้มากแค่ไหน? <span class="text-rose-500">*</span>
+        </p>
+        <p class="text-gray-500 text-xs sm:text-sm mt-1 mb-5">How satisfied are you with our toilet?</p>
+        <div id="overallContainer" class="flex items-start justify-between sm:justify-start gap-1 sm:gap-6"></div>
       </div>
 
       <!-- 3. คะแนนรายด้าน (สร้างด้วย JavaScript) -->
@@ -349,4 +349,3 @@
 </body>
 </html>
 
-</html>
