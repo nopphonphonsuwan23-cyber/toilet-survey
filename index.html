@@ -6,6 +6,7 @@
 <title>แบบประเมินการบริการห้องน้ำ</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -24,72 +25,58 @@
   body { font-family: 'Kanit', sans-serif; }
   .modal-hidden { display: none; }
 
+  .bg-custom-image {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)),
+                      url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1920&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
 </style>
 </head>
 
-<body class="bg-gray-100 min-h-screen font-kanit text-gray-800">
+<body class="bg-custom-image min-h-screen font-kanit text-gray-800">
 
-  <!-- แถบหัวเรื่อง (โลโก้ + ชื่อแบบฟอร์ม) -->
-  <header class="bg-white border-b-4 border-blue-500">
-    <div class="max-w-3xl mx-auto flex items-center gap-4 px-4 sm:px-6 py-4">
+  <!-- ==================== Header & Logo ==================== -->
+  <header class="bg-white/90 backdrop-blur-md border-b-4 border-blue-500 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-3xl mx-auto flex items-center gap-4 sm:gap-5 px-4 sm:px-6 py-4">
+      <!-- โลโก้ UBON SQUARE (ขยายใหญ่ขึ้น) -->
       <div class="flex flex-col leading-none shrink-0">
-        <span class="text-lg sm:text-xl font-extrabold tracking-tight text-gray-900">BUON</span>
-        <span class="text-[10px] sm:text-xs font-semibold tracking-widest text-amber-700 -mt-0.5">SQUARE</span>
+        <span class="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900">UBON</span>
+        <span class="text-sm sm:text-xl font-semibold tracking-[0.3em] text-amber-700 mt-0.5">SQUARE</span>
       </div>
-      <div class="w-px h-10 bg-gray-200 hidden sm:block"></div>
+      <div class="w-px h-14 sm:h-16 bg-gray-200"></div>
       <div class="min-w-0">
-        <h1 class="text-blue-600 font-semibold text-base sm:text-lg leading-tight truncate">แบบประเมินความพึงพอใจในการใช้บริการห้องน้ำ</h1>
-        <p class="text-gray-400 text-xs">Customer satisfaction survey</p>
+        <h1 class="text-blue-600 font-semibold text-sm sm:text-lg leading-tight">แบบประเมินความพึงพอใจในการใช้บริการห้องน้ำ</h1>
+        <p class="text-gray-500 text-xs">Customer satisfaction survey</p>
       </div>
     </div>
   </header>
 
+  <!-- ==================== Main Form ==================== -->
   <main class="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-4">
-
-    <div class="bg-white rounded-lg shadow-sm p-5">
-      <h2 class="text-gray-900 font-medium text-lg">แบบประเมินความพึงพอใจในการใช้บริการห้องน้ำ</h2>
-    </div>
 
     <form id="toiletForm" class="space-y-4" novalidate>
 
-      <!-- 1. ความพึงพอใจโดยรวม -->
-      <fieldset class="bg-white rounded-lg shadow-sm p-5">
-        <legend class="text-gray-900 font-medium">คุณพึงพอใจในการใช้บริการห้องน้ำในครั้งนี้มากแค่ไหน? <span class="text-rose-500">*</span></legend>
-        <p class="text-gray-400 text-sm mb-4">How satisfied are you with our toilet?</p>
-
-        <div class="flex gap-3 sm:gap-4">
-          <label class="cursor-pointer">
-            <input type="radio" name="satisfaction" value="1" required class="peer sr-only">
-            <span class="text-4xl sm:text-5xl inline-flex items-center justify-center rounded-full p-1.5 transition-transform hover:scale-105 peer-checked:scale-110 peer-checked:bg-blue-50 peer-checked:ring-2 peer-checked:ring-blue-400">😣</span>
-          </label>
-          <label class="cursor-pointer">
-            <input type="radio" name="satisfaction" value="2" class="peer sr-only">
-            <span class="text-4xl sm:text-5xl inline-flex items-center justify-center rounded-full p-1.5 transition-transform hover:scale-105 peer-checked:scale-110 peer-checked:bg-blue-50 peer-checked:ring-2 peer-checked:ring-blue-400">🙁</span>
-          </label>
-          <label class="cursor-pointer">
-            <input type="radio" name="satisfaction" value="3" class="peer sr-only">
-            <span class="text-4xl sm:text-5xl inline-flex items-center justify-center rounded-full p-1.5 transition-transform hover:scale-105 peer-checked:scale-110 peer-checked:bg-blue-50 peer-checked:ring-2 peer-checked:ring-blue-400">😐</span>
-          </label>
-          <label class="cursor-pointer">
-            <input type="radio" name="satisfaction" value="4" class="peer sr-only">
-            <span class="text-4xl sm:text-5xl inline-flex items-center justify-center rounded-full p-1.5 transition-transform hover:scale-105 peer-checked:scale-110 peer-checked:bg-blue-50 peer-checked:ring-2 peer-checked:ring-blue-400">🙂</span>
-          </label>
-          <label class="cursor-pointer">
-            <input type="radio" name="satisfaction" value="5" class="peer sr-only">
-            <span class="text-4xl sm:text-5xl inline-flex items-center justify-center rounded-full p-1.5 transition-transform hover:scale-105 peer-checked:scale-110 peer-checked:bg-blue-50 peer-checked:ring-2 peer-checked:ring-blue-400">😄</span>
-          </label>
-        </div>
-      </fieldset>
+      <!-- 1. ความพึงพอใจโดยรวม (สร้างด้วย JavaScript) -->
+      <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-md p-6 sm:p-8 border border-white/60">
+        <p class="text-gray-900 font-medium text-base sm:text-lg leading-snug">
+          คุณพึงพอใจในการใช้บริการห้องน้ำในครั้งนี้มากแค่ไหน? <span class="text-rose-500">*</span>
+        </p>
+        <p class="text-gray-500 text-xs sm:text-sm mt-1 mb-5">How satisfied are you with our toilet?</p>
+        <div id="overallContainer" class="flex items-start justify-between sm:justify-start gap-1 sm:gap-6"></div>
+      </div>
 
       <!-- 2. ช่วงอายุ -->
-      <div class="bg-white rounded-lg shadow-sm p-5">
+      <div class="bg-white/90 backdrop-blur-md rounded-xl shadow-md p-5 border border-white/50">
         <label for="age" class="block text-gray-900 font-medium">ช่วงอายุของคุณ <span class="text-rose-500">*</span></label>
-        <p class="text-gray-400 text-sm mb-3">Your age range</p>
+        <p class="text-gray-500 text-sm mb-3">Your age range</p>
         <select id="age" name="age" required
-          class="w-full border border-gray-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-blue-200 focus:border-blue-500 outline-none transition-all">
+          class="w-full border border-gray-300 rounded-lg p-3 bg-white/80 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 outline-none transition-all">
           <option value="" disabled selected>กรุณาเลือกช่วงอายุ</option>
           <option value="ต่ำกว่า 20 ปี">ต่ำกว่า 20 ปี</option>
           <option value="20-39 ปี">20-39 ปี</option>
@@ -98,25 +85,25 @@
         </select>
       </div>
 
-      <!-- 3. คะแนนรายด้าน -->
+      <!-- 3. คะแนนรายด้าน (สร้างด้วย JavaScript) -->
       <div id="criteriaContainer" class="space-y-4"></div>
 
-      <!-- ข้อเสนอแนะเพิ่มเติม -->
-      <div class="bg-white rounded-lg shadow-sm p-5">
+      <!-- 4. ข้อเสนอแนะ -->
+      <div class="bg-white/90 backdrop-blur-md rounded-xl shadow-md p-5 border border-white/50">
         <label for="comments" class="block text-gray-900 font-medium">สามารถร่วมแสดงความคิดเห็นเพื่อพัฒนาการให้บริการต่อไป</label>
-        <p class="text-gray-400 text-sm mb-3">Please share your suggestion with us, your feedback is highly appreciated.</p>
+        <p class="text-gray-500 text-sm mb-3">Please share your suggestion with us, your feedback is highly appreciated.</p>
         <textarea id="comments" name="comments" rows="3" placeholder="พิมพ์ข้อเสนอแนะของคุณที่นี่..."
-          class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 outline-none resize-none transition-all"></textarea>
+          class="w-full border border-gray-300 rounded-lg p-3 bg-white/80 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 outline-none resize-none transition-all"></textarea>
       </div>
 
       <button type="submit" id="submitBtn"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium p-3.5 rounded-lg transition-all shadow-sm hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 flex justify-center items-center gap-2 text-base">
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium p-3.5 rounded-lg transition-all shadow-md hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 flex justify-center items-center gap-2 text-base">
         <span>ส่งผลประเมิน</span>
       </button>
     </form>
   </main>
 
-  <!-- ป๊อปอัปแจ้งเตือนความสำเร็จ -->
+  <!-- ==================== Success Modal ==================== -->
   <div id="successModal" class="modal-hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50" style="display:none" role="dialog" aria-modal="true" aria-labelledby="successTitle">
     <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center border border-gray-100">
       <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-100 text-emerald-600 mb-4">
@@ -133,12 +120,10 @@
     </div>
   </div>
 
+  <!-- ==================== JavaScript ==================== -->
   <script>
-    // ★★★ แก้ตรงนี้ ★★★
-    // วางลิงก์ Web App (URL ที่ลงท้ายด้วย /exec) ที่ได้จากการ Deploy ใน Apps Script
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvGGuNjm8SqPM8vAaO85BGcp4zU8WrS9BgdizIsDxJlw2XLJ30_mPjhc184l-tGMKR/exec';
 
-    // รายการหัวข้อประเมินย่อย พร้อมคำแปลอังกฤษ
     const CRITERIA = [
       { name: 'cleanliness', label: 'ความสะอาดพื้นและผนัง', sub: 'Cleanliness of floor and walls' },
       { name: 'ventilation', label: 'ระบบระบายอากาศ/กลิ่น', sub: 'Ventilation and odor control' },
@@ -146,22 +131,37 @@
       { name: 'lighting',    label: 'แสงสว่างและความปลอดภัย', sub: 'Lighting and safety' },
     ];
 
+    // คะแนน 1-5 พร้อมข้อความระดับความพึงพอใจใต้รูป
+    const EMOJIS = [
+      { score: 1, icon: '😣', text: 'ไม่พอใจมาก' },
+      { score: 2, icon: '🙁', text: 'ไม่พอใจ' },
+      { score: 3, icon: '😐', text: 'ปานกลาง' },
+      { score: 4, icon: '🙂', text: 'พอใจ' },
+      { score: 5, icon: '😄', text: 'พอใจมาก' },
+    ];
+
+    // สร้างปุ่มเลือกอีโมจิ + ข้อความใต้รูป
+    function buildOptions(name, big) {
+      const iconSize = big ? 'text-4xl sm:text-5xl p-2' : 'text-3xl sm:text-4xl p-1';
+      return EMOJIS.map(({ score, icon, text }, i) => `
+        <label class="cursor-pointer flex flex-col items-center text-center w-[4.25rem] sm:w-20">
+          <input type="radio" name="${name}" value="${score}" ${i === 0 ? 'required' : ''} class="peer sr-only">
+          <span class="${iconSize} inline-flex items-center justify-center rounded-full transition-transform hover:scale-105 peer-checked:scale-110 peer-checked:bg-blue-100 peer-checked:ring-2 peer-checked:ring-blue-400">${icon}</span>
+          <span class="mt-1 text-[11px] sm:text-sm leading-tight text-gray-500 peer-checked:text-blue-600 peer-checked:font-semibold">${text}</span>
+        </label>
+      `).join('');
+    }
+
+    document.getElementById('overallContainer').innerHTML = buildOptions('satisfaction', true);
+
     const criteriaContainer = document.getElementById('criteriaContainer');
     CRITERIA.forEach(({ name, label, sub }) => {
       const card = document.createElement('div');
-      card.className = 'bg-white rounded-lg shadow-sm p-5';
-
-      const pills = [1, 2, 3, 4, 5].map((n, i) => `
-        <label class="cursor-pointer">
-          <input type="radio" name="${name}" value="${n}" ${i === 0 ? 'required' : ''} class="peer sr-only">
-          <span class="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 text-sm font-medium text-gray-600 transition-colors peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600">${n}</span>
-        </label>
-      `).join('');
-
+      card.className = 'bg-white/90 backdrop-blur-md rounded-xl shadow-md p-5 border border-white/50';
       card.innerHTML = `
         <p class="text-gray-900 font-medium">${label} <span class="text-rose-500">*</span></p>
-        <p class="text-gray-400 text-sm mb-3">${sub}</p>
-        <div class="flex gap-3">${pills}</div>
+        <p class="text-gray-500 text-sm mb-3">${sub}</p>
+        <div class="flex items-start justify-between sm:justify-start gap-1 sm:gap-4">${buildOptions(name, false)}</div>
       `;
       criteriaContainer.appendChild(card);
     });
@@ -193,8 +193,6 @@
       const payload = Object.fromEntries(formData.entries());
 
       try {
-        // ใช้ Content-Type: text/plain เพื่อให้เบราว์เซอร์ไม่ส่ง preflight (OPTIONS)
-        // ซึ่ง Apps Script Web App ไม่รองรับ preflight โดยตรง
         const res = await fetch(SCRIPT_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
