@@ -88,6 +88,9 @@
       <!-- 3. คะแนนรายด้าน (สร้างด้วย JavaScript) -->
       <div id="criteriaContainer" class="space-y-4"></div>
 
+      <!-- 3.1 คำถามแบบเลือกได้หลายข้อ (สร้างด้วย JavaScript) -->
+      <div id="choiceContainer" class="space-y-4"></div>
+
       <!-- 4. ข้อเสนอแนะ -->
       <div class="bg-white/90 backdrop-blur-md rounded-xl shadow-md p-5 border border-white/50">
         <label for="comments" class="block text-gray-900 font-medium">สามารถร่วมแสดงความคิดเห็นเพื่อพัฒนาการให้บริการต่อไป</label>
@@ -166,7 +169,120 @@
       criteriaContainer.appendChild(card);
     });
 
+    // ---------- คำถามแบบ Checkbox (max = จำนวนข้อที่เลือกได้สูงสุด, exclusive = ตัวเลือกที่เลือกร่วมกับข้ออื่นไม่ได้) ----------
+    const CHOICES = [
+      {
+        name: 'toilet_improve',
+        label: 'ห้องน้ำมีเรื่องใดที่ควรปรับปรุง?',
+        hint: 'เลือกได้มากกว่า 1 ข้อ',
+        max: null,
+        exclusive: 'ไม่มีเรื่องที่ควรปรับปรุง',
+        options: ['ไม่มีเรื่องที่ควรปรับปรุง', 'ทิชชูหมดหรือมีไม่เพียงพอ', 'อ่างล้างมือหรือบริเวณเคาน์เตอร์เปียก', 'โถสุขภัณฑ์สกปรกหรืออุดตัน', 'อุปกรณ์ภายในห้องน้ำชำรุด', 'มีกลิ่นไม่พึงประสงค์', 'ถังขยะเต็ม', 'พื้นเปียกหรือสกปรก', 'ห้องน้ำมีจำนวนไม่เพียงพอ'],
+      },
+      {
+        name: 'mall_improve',
+        label: 'ศูนย์การค้ามีเรื่องใดที่ควรปรับปรุง?',
+        hint: 'เลือกได้ไม่เกิน 3 ข้อ',
+        max: 3,
+        exclusive: 'ไม่มีเรื่องที่ควรปรับปรุง',
+        options: ['ไม่มีเรื่องที่ควรปรับปรุง', 'ความสะอาด', 'ห้องน้ำ', 'ที่จอดรถ', 'ความสะดวกในการเดินทางเข้า–ออก', 'ความหลากหลายของร้านค้า', 'ความหลากหลายของร้านอาหารและเครื่องดื่ม', 'ราคาและโปรโมชั่น', 'กิจกรรมและงานอีเวนต์', 'ที่นั่งพักและพื้นที่ส่วนกลาง', 'ความปลอดภัย', 'การให้บริการของพนักงาน', 'ป้ายบอกทางและข้อมูลภายในศูนย์'],
+      },
+      {
+        name: 'mall_want_more',
+        label: 'คุณอยากให้ศูนย์การค้ามีอะไรเพิ่มขึ้นมากที่สุด?',
+        hint: 'เลือกได้ไม่เกิน 3 ข้อ',
+        max: 3,
+        exclusive: 'ไม่ต้องการให้เพิ่ม',
+        options: ['ร้านอาหาร', 'คาเฟ่และร้านเครื่องดื่ม', 'ร้านขนมและของหวาน', 'ร้านสินค้าแฟชั่น', 'สินค้าราคาประหยัด', 'ซูเปอร์มาร์เก็ตและของใช้ประจำวัน', 'บริการด้านสุขภาพและความงาม', 'ธนาคารและบริการทางการเงิน', 'ฟิตเนสและกิจกรรมเพื่อสุขภาพ', 'พื้นที่สำหรับเด็กและครอบครัว', 'พื้นที่นั่งพักหรือพื้นที่พบปะ', 'ตลาดนัด', 'กิจกรรม คอนเสิร์ต หรือเวิร์กช็อป', 'ไม่ต้องการให้เพิ่ม'],
+      },
+    ];
+
+    const choiceContainer = document.getElementById('choiceContainer');
+    const cards = [];
+
+    // อัปเดตสถานะการ์ด: จำกัดจำนวนข้อ, เปิด/ปิดช่อง "อื่น ๆ", แสดงตัวนับ
+    function refreshCard(card, max) {
+      const boxes = [...card.querySelectorAll('input[type=checkbox]')];
+      const n = boxes.filter(b => b.checked).length;
+      boxes.forEach(b => {
+        b.disabled = !!max && n >= max && !b.checked && !b.hasAttribute('data-exclusive');
+        b.closest('label').classList.toggle('opacity-50', b.disabled);
+      });
+      const txt = card.querySelector('[data-other-text]');
+      const otherOn = card.querySelector('[data-other]').checked;
+      txt.disabled = !otherOn;
+      txt.classList.toggle('hidden', !otherOn);
+      if (!otherOn) txt.value = '';
+      card.querySelector('[data-count]').textContent = max ? `(เลือกแล้ว ${n}/${max})` : '';
+      if (n > 0) card.querySelector('[data-error]').classList.add('hidden');
+    }
+
+    CHOICES.forEach((q) => {
+      const opts = q.options.concat(['อื่น ๆ']);
+      const card = document.createElement('div');
+      card.className = 'bg-white/90 backdrop-blur-md rounded-xl shadow-md p-5 border border-white/50';
+      card.innerHTML = `
+        <p class="text-gray-900 font-medium">${q.label} <span class="text-rose-500">*</span></p>
+        <p class="text-gray-500 text-sm mb-3">[${q.hint}] <span data-count class="text-blue-600 font-medium"></span></p>
+        <div class="space-y-1">
+          ${opts.map((t, i) => {
+            const isOther = i === opts.length - 1;
+            return `
+            <label class="flex items-start gap-3 rounded-lg p-2 hover:bg-blue-50/70 cursor-pointer transition-colors">
+              <input type="checkbox" value="${t}" ${isOther ? 'data-other' : ''} ${t === q.exclusive ? 'data-exclusive' : ''} class="mt-1 h-5 w-5 shrink-0 accent-blue-600">
+              <span class="leading-snug">${isOther ? 'อื่น ๆ โปรดระบุ' : t}</span>
+            </label>`;
+          }).join('')}
+        </div>
+        <input type="text" data-other-text disabled maxlength="200" placeholder="โปรดระบุ..."
+          class="hidden mt-2 w-full border border-gray-300 rounded-lg p-3 bg-white/80 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 outline-none transition-all">
+        <p data-error class="hidden text-rose-500 text-sm mt-2">กรุณาเลือกอย่างน้อย 1 ข้อ</p>
+      `;
+
+      card.addEventListener('change', (e) => {
+        const cb = e.target;
+        if (cb.type !== 'checkbox') return;
+        const boxes = [...card.querySelectorAll('input[type=checkbox]')];
+        if (cb.checked && cb.hasAttribute('data-exclusive')) {
+          boxes.forEach(b => { if (b !== cb) b.checked = false; });   // เลือก "ไม่มี..." → ล้างข้ออื่น
+        } else if (cb.checked) {
+          boxes.forEach(b => { if (b.hasAttribute('data-exclusive')) b.checked = false; }); // เลือกข้ออื่น → ยกเลิก "ไม่มี..."
+        }
+        refreshCard(card, q.max);
+      });
+
+      choiceContainer.appendChild(card);
+      cards.push({ q, card });
+      refreshCard(card, q.max);
+    });
+
+    // รวมคำตอบ Checkbox เป็นข้อความคั่นด้วย ", " สำหรับส่งเข้า Google Sheet
+    function getChoiceAnswers() {
+      const out = {};
+      cards.forEach(({ q, card }) => {
+        out[q.name] = [...card.querySelectorAll('input[type=checkbox]:checked')].map(b => {
+          if (!b.hasAttribute('data-other')) return b.value;
+          const t = card.querySelector('[data-other-text]').value.trim();
+          return t ? `อื่น ๆ: ${t}` : 'อื่น ๆ';
+        }).join(', ');
+      });
+      return out;
+    }
+
+    // ตรวจว่าทุกข้อเลือกอย่างน้อย 1 ตัวเลือก
+    function validateChoices() {
+      let first = null;
+      cards.forEach(({ card }) => {
+        const ok = card.querySelector('input[type=checkbox]:checked');
+        card.querySelector('[data-error]').classList.toggle('hidden', !!ok);
+        if (!ok && !first) first = card;
+      });
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return !first;
+    }
+
     const form = document.getElementById('toiletForm');
+    form.addEventListener('reset', () => setTimeout(() => cards.forEach(({ q, card }) => refreshCard(card, q.max)), 0));
     const submitBtn = document.getElementById('submitBtn');
     const modal = document.getElementById('successModal');
 
@@ -177,6 +293,8 @@
         alert('ยังไม่ได้ตั้งค่า SCRIPT_URL ในไฟล์นี้ กรุณาแก้ตัวแปร SCRIPT_URL ด้านบนของสคริปต์ก่อน');
         return;
       }
+
+      if (!validateChoices()) return;
 
       submitBtn.disabled = true;
       submitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
@@ -191,6 +309,7 @@
 
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
+      Object.assign(payload, getChoiceAnswers());
 
       try {
         const res = await fetch(SCRIPT_URL, {
@@ -228,4 +347,6 @@
   </script>
 
 </body>
+</html>
+
 </html>
