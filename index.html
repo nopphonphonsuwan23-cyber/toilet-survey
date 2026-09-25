@@ -62,6 +62,9 @@
 
     <form id="toiletForm" class="space-y-4" novalidate>
 
+      <!-- 0. ห้องน้ำ/จุดที่ประเมิน (มาจาก QR โค้ด หรือให้เลือกเอง สร้างด้วย JavaScript) -->
+      <div id="locationContainer"></div>
+
       <!-- 1. ช่วงอายุ (อยู่บนสุด) -->
       <div class="bg-white/90 backdrop-blur-md rounded-xl shadow-md p-5 border border-white/50">
         <label for="age" class="block text-gray-900 font-medium">ช่วงอายุของคุณ <span class="text-rose-500">*</span></label>
@@ -126,6 +129,78 @@
   <!-- ==================== JavaScript ==================== -->
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvGGuNjm8SqPM8vAaO85BGcp4zU8WrS9BgdizIsDxJlw2XLJ30_mPjhc184l-tGMKR/exec';
+
+    // รายชื่อโซนและห้องน้ำทั้งหมด (ต้องตรงกับหน้า QR โค้ด qr-codes.html)
+    // slug ของแต่ละห้องน้ำ ใช้จับคู่กับพารามิเตอร์ ?loc= ที่มาจากการสแกน QR
+    const ZONES = [
+      { zone: 'โซน โชว์รูม', locations: [
+        { slug: 'showroom_f1', label: 'ห้องน้ำโชว์รูม ชั้น 1' },
+        { slug: 'showroom_f2', label: 'ห้องน้ำโชว์รูม ชั้น 2' },
+        { slug: 'showroom_f3', label: 'ห้องน้ำโชว์รูม ชั้น 3' },
+      ]},
+      { zone: 'โซนวินเลจ', locations: [
+        { slug: 'village_e1', label: 'ห้องน้ำอาคาร E ชั้น 1' },
+        { slug: 'village_e2', label: 'ห้องน้ำอาคาร E ชั้น 2' },
+        { slug: 'village_f1', label: 'ห้องน้ำอาคาร F ชั้น 1' },
+        { slug: 'village_f2', label: 'ห้องน้ำอาคาร F ชั้น 2' },
+        { slug: 'village_j1', label: 'ห้องน้ำอาคาร J ชั้น 1' },
+        { slug: 'village_j2', label: 'ห้องน้ำอาคาร J ชั้น 2' },
+        { slug: 'village_l',  label: 'ห้องน้ำอาคาร L' },
+      ]},
+      { zone: 'โซน Bazaar', locations: [
+        { slug: 'bazaar_2', label: 'ห้องน้ำ Bazaar 2' },
+        { slug: 'bazaar_3', label: 'ห้องน้ำ Bazaar 3' },
+        { slug: 'bazaar_4', label: 'ห้องน้ำ Bazaar 4' },
+        { slug: 'bazaar_5', label: 'ห้องน้ำ Bazaar 5' },
+      ]},
+      { zone: 'โซน อาคาร 6', locations: [
+        { slug: 'building6_activity', label: 'ห้องน้ำลานกิจกรรม' },
+      ]},
+    ];
+    // สร้างตารางค้นหา slug -> { zone, label } อย่างรวดเร็ว
+    const LOCATION_BY_SLUG = {};
+    ZONES.forEach(({ zone, locations }) => locations.forEach((l) => { LOCATION_BY_SLUG[l.slug] = { zone, label: l.label }; }));
+
+    // ---------- การ์ดห้องน้ำ/จุดที่ประเมิน ----------
+    // ถ้ามาจาก QR (?loc=slug ที่รู้จัก) → แสดงป้ายล็อกไว้ ไม่ต้องเลือกเอง
+    // ถ้าไม่มีหรือ slug ไม่รู้จัก → ให้เลือกเองจาก dropdown แบบบังคับตอบ
+    const locationContainer = document.getElementById('locationContainer');
+    const params = new URLSearchParams(location.search);
+    const fromQR = LOCATION_BY_SLUG[params.get('loc')];
+
+    if (fromQR) {
+      locationContainer.innerHTML = `
+        <div class="bg-blue-50 border border-blue-200 rounded-xl shadow-md p-5 flex items-center gap-3">
+          <span class="text-2xl shrink-0">📍</span>
+          <div class="min-w-0">
+            <p class="text-xs text-blue-500">กำลังประเมิน</p>
+            <p class="text-blue-900 font-medium truncate">${fromQR.zone} · ${fromQR.label}</p>
+          </div>
+        </div>
+        <input type="hidden" name="zone" value="${fromQR.zone}">
+        <input type="hidden" name="location" value="${fromQR.label}">
+      `;
+    } else {
+      locationContainer.innerHTML = `
+        <div class="bg-white/90 backdrop-blur-md rounded-xl shadow-md p-5 border border-white/50">
+          <label for="locationSelect" class="block text-gray-900 font-medium">คุณกำลังใช้บริการห้องน้ำจุดใด <span class="text-rose-500">*</span></label>
+          <p class="text-gray-500 text-sm mb-3">Which restroom are you rating?</p>
+          <select id="locationSelect" name="location" required
+            class="w-full border border-gray-300 rounded-lg p-3 bg-white/80 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 outline-none transition-all">
+            <option value="" disabled selected>กรุณาเลือกห้องน้ำ</option>
+            ${ZONES.map(({ zone, locations }) => `
+              <optgroup label="${zone}">
+                ${locations.map((l) => `<option value="${l.label}" data-zone="${zone}">${l.label}</option>`).join('')}
+              </optgroup>
+            `).join('')}
+          </select>
+          <input type="hidden" name="zone" id="zoneHidden">
+        </div>
+      `;
+      const sel = document.getElementById('locationSelect');
+      const zoneHidden = document.getElementById('zoneHidden');
+      sel.addEventListener('change', () => { zoneHidden.value = sel.selectedOptions[0]?.dataset.zone || ''; });
+    }
 
     const CRITERIA = [
       { name: 'cleanliness', label: 'ความสะอาดพื้นและผนัง', sub: 'Cleanliness of floor and walls' },
@@ -311,17 +386,38 @@
       const payload = Object.fromEntries(formData.entries());
       Object.assign(payload, getChoiceAnswers());
 
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload),
-        });
-        const result = await res.json();
+      // ส่งข้อมูล พร้อมลองใหม่อัตโนมัติสูงสุด 3 ครั้ง เผื่อ Google ตอบกลับผิดพลาดชั่วคราว
+      // (บางครั้ง Apps Script จะตอบเป็นหน้า HTML แทน JSON เมื่อเซิร์ฟเวอร์ไม่พร้อมชั่วขณะ)
+      async function sendWithRetry(attempt = 1) {
+        let res;
+        try {
+          res = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload),
+          });
+        } catch (networkErr) {
+          if (attempt < 3) { await new Promise(r => setTimeout(r, attempt * 1000)); return sendWithRetry(attempt + 1); }
+          throw new Error('เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาตรวจสอบสัญญาณแล้วลองใหม่');
+        }
+
+        const text = await res.text();
+        let result;
+        try {
+          result = JSON.parse(text);
+        } catch (parseErr) {
+          // เจอหน้า HTML แทน JSON = ปัญหาชั่วคราวของ Google ลองส่งใหม่
+          if (attempt < 3) { await new Promise(r => setTimeout(r, attempt * 1000)); return sendWithRetry(attempt + 1); }
+          throw new Error('เซิร์ฟเวอร์ไม่ตอบสนองชั่วคราว กรุณาลองกดส่งอีกครั้ง');
+        }
 
         if (result.status !== 'success') {
           throw new Error(result.message || 'ไม่ทราบสาเหตุ');
         }
+      }
+
+      try {
+        await sendWithRetry();
 
         modal.classList.remove('modal-hidden');
         modal.style.display = 'flex';
@@ -348,4 +444,3 @@
 
 </body>
 </html>
-
